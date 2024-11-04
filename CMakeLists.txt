@@ -6,4 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 add_executable(LR_2
         main.cpp
         Stack.cpp
-        StackTask.cpp)
+        StackTask.cpp
+        Set.cpp
+        list.cpp
+        arr.cpp)
