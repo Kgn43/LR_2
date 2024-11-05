@@ -24,18 +24,22 @@ struct Set {
 
     friend ostream& operator<<(ostream& os, const Set& set) {
         os << "{";
+        bool z = true;
         for (size_t i = 0; i < set.bucketCount; i++){
             if (set.buckets[i].first == nullptr) continue;
             auto node = set.buckets[i].first;
+            if (z) {
+                z = false;
+            }
+            else {
+                os << ", ";
+            }
             while (node != nullptr) {
                 os << node->value;
-                if (node->next != nullptr) {
+                if (node->next != nullptr ) {
                     os << ", ";
                 }
                 node = node->next;
-            }
-            if (i+1 < set.bucketCount && set.buckets[i + 1].first != nullptr) {
-                os << ", ";
             }
         }
         os << "}" << endl;

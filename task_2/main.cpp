@@ -28,7 +28,7 @@ int main(int argc, char *argv[]) {
             }
             request.query[0] = delFirstLetter(request.query[0]); //убираем букву для упрощения чтения команды
             switch (strucType) {
-                case SetStruct:
+                case SET:
                     request.query[0] = delFirstLetter(request.query[0]); //-e
                     request.query[0] = delFirstLetter(request.query[0]); //-t
                     switch (commandRequest(request.query[0])) {
@@ -45,7 +45,7 @@ int main(int argc, char *argv[]) {
                             cout << "There is no such Set processing command" << endl;
                     }
                 break;
-                case Array:
+                case ARRAY:
                     switch (commandRequest(request.query[0])) {
                         case push:
                             arrPush(request);
@@ -60,7 +60,7 @@ int main(int argc, char *argv[]) {
                             cout << "There is no such Array processing command" << endl;
                     }
                     break;
-                case stack:
+                case STACK:
                     switch (commandRequest(request.query[0])) {
                         case push:
                             stackPush(request);
@@ -75,7 +75,7 @@ int main(int argc, char *argv[]) {
                             cout << "There is no such Stack processing command" << endl;
                     }
                     break;
-                case List:
+                case LIST:
                     switch (commandRequest(request.query[0])) {
                         case push:
                             listPush(request);
@@ -90,7 +90,7 @@ int main(int argc, char *argv[]) {
                             cout << "There is no such List processing command" << endl;
                     }
                     break;
-                case Queue:
+                case QUEUE:
                     switch (commandRequest(request.query[0])) {
                         case push:
                             queuePush(request);
@@ -105,7 +105,7 @@ int main(int argc, char *argv[]) {
                             cout << "There is no such Queue processing command" << endl;
                     }
                     break;
-                case HashMap:
+                case HASHMAP:
                     switch (commandRequest(request.query[0])) {
                         case insert:
                             hashSetInsert(request);
@@ -135,22 +135,22 @@ void consolePrint(const request& request){
     fstream file(request.file, ios::in);
     structures type = getType(request.file);
     switch (type) {
-        case Array:
+        case ARRAY:
             printArr(request);
             break;
-        case List:
+        case LIST:
             printList(request);
             break;
-        case Queue:
+        case QUEUE:
             printQueue(request);
             break;
-        case stack:
+        case STACK:
             printStack(request);
             break;
-        case HashMap:
+        case HASHMAP:
             printHashMap(request);
             break;
-        case SetStruct:
+        case SET:
             printSet(request);
     }
 }

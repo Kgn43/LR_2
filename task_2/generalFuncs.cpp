@@ -72,6 +72,17 @@ void callHelp(){ //я слишком поздно понял, что можно 
     std::cout << "\t\tOR" << std::endl;
     std::cout << "\t\'push hashMapName key\'  - get one pair value by key" << std::endl;
 
+
+    std::cout << "Set syntax:" << std::endl;
+
+    std::cout << "add:" << std::endl;
+    std::cout << "\t\'SETadd setName value\'  - insert value" << std::endl;
+
+    std::cout << "del:" << std::endl;
+    std::cout << "\t\'SETdel setName value\'  - delete element from hashMap by key" << std::endl;
+
+    std::cout << "at:" << std::endl;
+    std::cout << "\t\'SETat setName value\'  - check is this value in set" << std::endl;
 }
 
 
@@ -107,22 +118,18 @@ commands commandRequest(const string& input){
     if (input == "insert") return commands::insert;
     if (input == "add") return commands::add;
     if (input == "at") return commands::at;
-    else{
-        throw runtime_error("This command isn't exist");
-    }
+    throw runtime_error("This command isn't exist");
 }
 
 
 structures structRequest(const string& input){
-    if (input[0] == 'S' && input[1] == 'e' && input[2] == 't') return structures::SetStruct;
-    if (input[0] == 'A') return structures::Array;
-    if (input[0] == 'L') return structures::List;
-    if (input[0] == 'Q') return structures::Queue;
-    if (input[0] == 'S') return structures::stack;
-    if (input[0] == 'H') return structures::HashMap;
-    else{
-        throw runtime_error("This structure is not exist");
-    }
+    if (input[0] == 'S' && input[1] == 'E' && input[2] == 'T') return structures::SET;
+    if (input[0] == 'A') return structures::ARRAY;
+    if (input[0] == 'L') return structures::LIST;
+    if (input[0] == 'Q') return structures::QUEUE;
+    if (input[0] == 'S') return structures::STACK;
+    if (input[0] == 'H') return structures::HASHMAP;
+    throw runtime_error("This structure is not exist");
 }
 
 
@@ -137,17 +144,15 @@ request getRequest(int argc, char *argv[] ){
             //если после флага ничего нет || если после флага другой флаг
             if (i + 1 == argc || argv[i + 1][0] == '-') { //Если первое условие выполняется - второе не приведёт к ошибке т.к. не будет проверяться
                 throw runtime_error(("Error: empty query.\n Specify what to execute"));
-            } else {
-                output.file = argv[i + 1];
-                continue;
             }
+            output.file = argv[i + 1];
+            continue;
         }
         if (static_cast<string>(argv[i]) == "--query") {
             if (i + 1 == argc || argv[i + 1][0] == '-') { //если после флага ничего нет || если после флага другой флаг
                 throw runtime_error(("Error: empty query.\n Specify what to execute"));
-            } else {
-                output.query = splitToArr(static_cast<string>(argv[i + 1]));
             }
+            output.query = splitToArr(argv[i + 1]);
         }
     }
     return output;
@@ -156,12 +161,12 @@ request getRequest(int argc, char *argv[] ){
 
 structures getType(const string& fName){
     string splited = splitToArr(fName, '.')[0];
-    if (splited == "arr") return structures::Array;
-    if (splited == "list") return structures::List;
-    if (splited == "queue") return structures::Queue;
-    if (splited == "stack") return structures::stack;
-    if (splited == "hashMap") return structures::HashMap;
-    if (splited == "set") return structures::SetStruct;
+    if (splited == "arr") return structures::ARRAY;
+    if (splited == "list") return structures::LIST;
+    if (splited == "queue") return structures::QUEUE;
+    if (splited == "stack") return structures::STACK;
+    if (splited == "hashMap") return structures::HASHMAP;
+    if (splited == "set") return structures::SET;
     else{
         throw runtime_error("This structure isn't exist");
     }

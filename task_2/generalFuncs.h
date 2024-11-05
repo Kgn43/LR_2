@@ -20,12 +20,12 @@ enum commands{
 
 
 enum structures{
-    Array,
-    List,
-    Queue,
-    stack,
-    HashMap,
-    SetStruct
+    ARRAY,
+    LIST,
+    QUEUE,
+    STACK,
+    HASHMAP,
+    SET
 };
 
 

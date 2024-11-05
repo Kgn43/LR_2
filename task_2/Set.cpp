@@ -38,7 +38,7 @@ void Set::insert(const int& value) {
     if (!isExist){
         this->buckets[thisHash].backInsert(value);
         this->pairCount++;
-        if (this->bucketCount * this->bucketCount <= this->pairCount){
+        if (this->bucketCount * 2 <= this->pairCount){
             coliseum();
         }
     }
@@ -49,17 +49,17 @@ void Set::insert(const int& value) {
 
 
 void Set::del(const int& value) {
-    size_t thisHash = hash(value);
+    const size_t thisHash = hash(value);
     this->buckets[thisHash].delByVal(value);
     this->pairCount--;
 
 }
 
-bool Set::at(const int &key) const {
-    size_t thisHash = hash(key);
+bool Set::at(const int &value) const {
+    const size_t thisHash = hash(value);
     listNode<int>* node = this->buckets[thisHash].first;
     while(node != nullptr){
-        if (node->value == key){
+        if (node->value == value){
             return true;
         }
         node = node->next;
@@ -70,7 +70,7 @@ bool Set::at(const int &key) const {
 
 
 Set setFromStr(const string& line){
-    arr<string> values = splitToArr(line, '_');
+    const arr<string> values = splitToArr(line, '_');
     Set output;
     for (size_t i = 0; i < values.size; ++i){
         output.insert(stoi(values[i]));
