@@ -11,4 +11,6 @@ add_executable(LR_2
         structures/list.cpp
         structures/arr.cpp
         structures/Pair.cpp
+        SetTask.cpp
+        ArrayTask.cpp
 )

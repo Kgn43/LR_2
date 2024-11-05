@@ -21,6 +21,7 @@ struct Set {
     void insert(const int& value);
     void del(const int& value);
     bool at(const int& value) const;
+    void clear();
 
     friend ostream& operator<<(ostream& os, const Set& set) {
         os << "{";
@@ -42,7 +43,7 @@ struct Set {
                 node = node->next;
             }
         }
-        os << "}" << endl;
+        os << "}";
         return os;
     }
 

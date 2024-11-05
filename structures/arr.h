@@ -1,6 +1,7 @@
 #ifndef ARR_H
 #define ARR_H
 
+#include <iostream>
 #include <string>
 #include <sstream>
 using std::ostream, std::string, std::out_of_range;
@@ -21,6 +22,17 @@ struct arr {
         for (size_t i = 0; i < size; ++i) {
             data[i] = T();
         }
+    }
+
+    explicit arr(const std::string &dat) : size(dat.size()), capacity(dat.size()) {
+        data = new T[capacity];  // Выделение памяти под массив
+        for (size_t i = 0; i < dat.size(); ++i) {
+            data[i] = dat[i];
+        }
+    }
+
+    ~arr() {
+        delete[] data;
     }
 
     void realoc();

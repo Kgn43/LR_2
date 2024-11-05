@@ -68,6 +68,15 @@ bool Set::at(const int &value) const {
 }
 
 
+void Set::clear() {
+    while (this->pairCount != 0) {
+        int num = this->Get();
+        this->del(num);
+    }
+}
+
+
+
 
 Set setFromStr(const string& line){
     const arr<string> values = splitToArr(line, '_');
