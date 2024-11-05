@@ -65,19 +65,24 @@ void hashMap::insert(const Pair& input) {
     }
 }
 
+/*
+const size_t thisHash = hash(value);
+this->buckets[thisHash].delByVal(value);
+ */
+
 
 void hashMap::del(const string& key) {
     size_t thisHash = hash(key);
     List<Pair> oneBucket = this->buckets[thisHash];
     ListNode<Pair>* node = oneBucket.first;
-    while(node != nullptr){
-        if (node->next == nullptr){ //остался один узел
+    if (node->next == nullptr){ //остался один узел
             delete node;
             this->buckets[thisHash].first = nullptr;
             this->buckets[thisHash].last = nullptr;
             this->pairCount--;
-            break;
-        }
+            return;
+    }
+    while(node != nullptr){
         if (node->value.key == key){
             if (node->next != nullptr && node->previous != nullptr){ //удаляем не с краю
                 node->next->previous = node->previous;
@@ -94,7 +99,6 @@ void hashMap::del(const string& key) {
             }
             else { //удалить последний
                 oneBucket.delLast();
-                delete node;
                 this->pairCount--;
                 break;
             }

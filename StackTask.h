@@ -2,7 +2,7 @@
 #define STACKTASK_H
 
 #include <iostream>
-#include "Stack.h"
+#include "structures/Stack.h"
 
 using std::cout, std::endl, std::string;
 

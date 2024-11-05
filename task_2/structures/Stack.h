@@ -10,7 +10,7 @@ struct Stack{
     Node<T>* head;
     size_t size;
 
-    Stack() : head(nullptr) {} //конструктор
+    Stack() : head(nullptr), size(0) {} //конструктор
 
 
     friend ostream& operator<<(ostream& os, const Stack<T>& st) {
