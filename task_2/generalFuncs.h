@@ -4,7 +4,8 @@
 
 #include <iostream>
 #include <fstream>
-#include "arr.h"
+#include <utility>
+#include "structures/arr.h"
 
 
 
@@ -38,8 +39,23 @@ struct request{
 
 
 struct fileData{
+    string type;
     string name;
     string data;
+
+    fileData () = default;
+    fileData (string t, string n, string d) : type(t), name(n), data(d) {};
+
+    void getVarInfo(const string &input) {
+        arr<string> split;
+        split = splitToArr(input, ';');
+        if(split.size != 3 || split[0][0] != '#') {
+            throw std::runtime_error("Error in fileData: data is broken");
+        }
+        this->type = split[0];
+        this->name = split[1];
+        this->data = split[2];
+    }
 };
 
 

@@ -1,44 +1,6 @@
 #include "queue_funcs.h"
 
 
-void printQueue(const request& request){
-    ifstream file(request.file, ios::in); //откуда читаем
-    string variableLine; //считываемая строка с файла
-    if (request.query.size == 1){ //вывести все переменные
-        fileData var;
-        while (getline(file, variableLine)) { //проверяем все существующие переменные
-            if (variableLine == " " || variableLine.empty()) continue;
-            var.name = splitToArr(variableLine, ';')[0]; //определяем их имена
-            var.data = splitToArr(variableLine, ';')[1]; //и то, что они хранят
-            queue<string> currVar = splitToQueue(var.data); //определяем реальную переменную этого Типа данных
-            cout << var.name << " = " << currVar << endl;
-        }
-    }
-    else if (request.query.size == 2) { //вывести одну переменную
-        string name = request.query[1]; //имя искомой переменной
-        fileData var;
-        bool varIsExist = false;
-        while (getline(file, variableLine)){ //проверяем все существующие переменные
-            if (variableLine == " " || variableLine.empty()) continue;
-            var.name = splitToArr(variableLine, ';')[0]; //определяем их имена
-            var.data = splitToArr(variableLine, ';')[1]; //и то, что они хранят
-            if (var.name == name){ //если такая переменная существует
-                varIsExist = true; //закрываем защёлку
-                queue<string> currVar = splitToQueue(var.data); //определяем реальную переменную этого Типа данных
-                cout << var.name << " = " << currVar << endl;
-            }
-        }
-        if (!varIsExist){
-            cout << "Wrong variable name" << endl;
-        }
-    }
-    else {
-        cout << "Wrong syntax" << endl;
-    }
-    file.close();
-}
-
-
 void queuePush(const request& request){
 //структура команды: push имяОчереди чтоЗаписать
     fstream file(request.file, ios::in);
@@ -52,13 +14,12 @@ void queuePush(const request& request){
     bool varIsExist = false;
     while (getline(file, variableLine)){ //проверяем все существующие переменные
         if (variableLine == " " || variableLine.empty()) continue;
-        var.name = splitToArr(variableLine, ';')[0]; //определяем их имена
-        var.data = splitToArr(variableLine, ';')[1]; //и то, что они хранят
-        if (var.name == name){ //если такая переменная существует
+        var.getVarInfo(variableLine);
+        if (var.name == name && var.type == "#QUEUE" && !varIsExist){ //если такая переменная существует
             varIsExist = true; //закрываем защёлку
             queue<string> currVar = splitToQueue(var.data); //определяем реальную переменную этого Типа данных
             currVar.push(value);
-            variableLine = var.name + ';' + unSplitQueue(currVar);//превращаем переменную в текст
+            variableLine = var.type + ';' + var.name + ';' + unSplitQueue(currVar);//превращаем переменную в текст
             currVar.clear();
             tmpFile << variableLine << endl;
         }
@@ -70,7 +31,7 @@ void queuePush(const request& request){
         cout << "making new queue" << endl;
         queue<string> newVar;//да, делаем это всегда.
         newVar.push(value);
-        variableLine = name + ';' + unSplitQueue(newVar);//превращаем переменную в текст
+        variableLine = "#QUEUE;" + name + ';' + unSplitQueue(newVar);//превращаем переменную в текст
         tmpFile << variableLine;
     }
     file.close();
@@ -97,15 +58,13 @@ void queuePop(const request& request){
     bool varIsExist = false;
     while (getline(file, variableLine)){ //проверяем все существующие переменные
         if (variableLine == " " || variableLine.empty()) continue;
-        var.name = splitToArr(variableLine, ';')[0]; //определяем их имена
-        var.data = splitToArr(variableLine, ';')[1]; //и то, что они хранят
-        if (var.name == name){ //если такая переменная существует
+        var.getVarInfo(variableLine);
+        if (var.name == name && var.type == "#QUEUE" && !varIsExist){ //если такая переменная существует
             varIsExist = true; //закрываем защёлку
             queue<string> currVar = splitToQueue(var.data); //определяем реальную переменную этого Типа данных
             currVar.pop();
-            variableLine = var.name + ';' + unSplitQueue(currVar);//превращаем переменную в текст
-            currVar.clear();
-            if (currVar.head == nullptr){
+            variableLine = var.type + ';' + var.name + ';' + unSplitQueue(currVar);//превращаем переменную в текст
+            if (currVar.head != nullptr){
                 tmpFile << variableLine << endl;
             }
         }
@@ -139,13 +98,13 @@ void queueGet(const request& request){
     bool varIsExist = false;
     while (getline(file, variableLine)){ //проверяем все существующие переменные
         if (variableLine == " " || variableLine.empty()) continue;
-        var.name = splitToArr(variableLine, ';')[0]; //определяем их имена
-        var.data = splitToArr(variableLine, ';')[1]; //и то, что они хранят
-        if (var.name == name){ //если такая переменная существует
+        var.getVarInfo(variableLine);
+        if (var.name == name && var.type == "#QUEUE"){ //если такая переменная существует
             varIsExist = true; //закрываем защёлку
             queue<string> currVar = splitToQueue(var.data); //определяем реальную переменную этого Типа данных
             cout << currVar.getFirst() << endl;
             currVar.clear();
+            break;
         }
     }
     if (!varIsExist){

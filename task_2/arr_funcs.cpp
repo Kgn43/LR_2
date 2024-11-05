@@ -1,44 +1,6 @@
 #include "arr_funcs.h"
 
 
-void printArr(const request& request){
-    ifstream file(request.file, ios::in); //откуда читаем
-    string variableLine; //считываемая строка с файла
-    if (request.query.size == 1){ //вывести все переменные
-        fileData var;
-        while (getline(file, variableLine)) { //проверяем все существующие переменные
-            if (variableLine == " " || variableLine.empty()) continue;
-            var.name = splitToArr(variableLine, ';')[0]; //определяем их имена
-            var.data = splitToArr(variableLine, ';')[1]; //и то, что они хранят
-            arr<string> currVar = splitToArr(var.data); //определяем реальную переменную этого Типа данных
-            cout << var.name << " = " << currVar << endl;
-        }
-    }
-    else if (request.query.size == 2) { //вывести одну переменную
-        string name = request.query[1]; //имя искомой переменной
-        fileData var;
-        bool varIsExist = false;
-        while (getline(file, variableLine)){ //проверяем все существующие переменные
-            if (variableLine == " " || variableLine.empty()) continue;
-            var.name = splitToArr(variableLine, ';')[0]; //определяем их имена
-            var.data = splitToArr(variableLine, ';')[1]; //и то, что они хранят
-            if (var.name == name){ //если такая переменная существует
-                varIsExist = true; //закрываем защёлку
-                arr<string> currVar = splitToArr(var.data); //определяем реальную переменную этого Типа данных
-                cout << var.name << " = " << currVar << endl;
-            }
-        }
-        if (!varIsExist){
-            cout << "Wrong variable name" << endl;
-        }
-    }
-    else {
-        cout << "Wrong syntax" << endl;
-    }
-    file.close();
-}
-
-
 void arrPush(const request& request){
 //структура команды1 (по индексу): push имяМассива куда что
 //структура команды2 (в конец): push имяМассива что
@@ -66,9 +28,8 @@ void arrPush(const request& request){
     bool varIsExist = false;
     while (getline(file, variableLine)){ //проверяем все существующие переменные
         if (variableLine == " " || variableLine.empty()) continue;
-        var.name = splitToArr(variableLine, ';')[0]; //определяем их имена
-        var.data = splitToArr(variableLine, ';')[1]; //и то, что они хранят
-        if (var.name == name){ //если такая переменная существует
+        var.getVarInfo(variableLine);
+        if (var.name == name && !varIsExist && var.type == "#ARRAY"){ //если такая переменная существует
             varIsExist = true; //закрываем защёлку
             arr<string> currVar = splitToArr(var.data); //определяем реальную переменную этого Типа данных
             currVar.push_back(value); //закидываем то, что просят в конец
@@ -80,9 +41,8 @@ void arrPush(const request& request){
                     currVar.data[i - 1] = tmp;
                 }
             }
-            variableLine = var.name + ';' + unsplit(currVar);//превращаем переменную в текст
+            variableLine = var.type + ";" + var.name + ';' + unsplit(currVar);//превращаем переменную в текст
             tmpFile << variableLine << endl;
-            //currVar.clear();
         }
         else {
             tmpFile << variableLine << endl;
@@ -95,7 +55,7 @@ void arrPush(const request& request){
         }
         arr<string> newVar;//да, можно и не делать этого. но мы сделаем. потому, что можем.
         newVar.push_back(value);
-        variableLine = name + ';' + unsplit(newVar);//превращаем переменную в текст
+        variableLine = "#ARRAY;" + name + ';' + unsplit(newVar);//превращаем переменную в текст
         tmpFile << variableLine;
         //newVar.clear();
     }
@@ -116,7 +76,7 @@ void arrDel(const request& request){
     fstream file(request.file, ios::in);
     fstream tmpFile("tmp.data", ios::out);
     if(!tmpFile.is_open()) throw runtime_error("tmp.data file doesn't exist");
-    if (request.query.size != 3) throw runtime_error("wrong command syntax");
+    if (request.query.size != 3 || !isItNumber(request.query[2])) throw runtime_error("wrong command syntax");
     string name = request.query[1]; //из какого массива удалять
     size_t index = stoi(request.query[2]); //с какой позиции
     string variableLine; //считываемая строка с файла
@@ -124,15 +84,13 @@ void arrDel(const request& request){
     bool varIsExist = false;
     while (getline(file, variableLine)){ //проверяем все существующие переменные
         if (variableLine == " " || variableLine.empty()) continue;
-        var.name = splitToArr(variableLine, ';')[0]; //определяем их имена
-        var.data = splitToArr(variableLine, ';')[1]; //и то, что они хранят
-        if (var.name == name){ //если такая переменная существует
+        var.getVarInfo(variableLine);
+        if (var.name == name && !varIsExist && var.type == "#ARRAY"){ //если такая переменная существует
             varIsExist = true; //закрываем защёлку
             arr<string> currVar = splitToArr(var.data); //определяем реальную переменную этого Типа данных
             currVar.del(index);//удаление
-            variableLine = var.name + ';' + unsplit(currVar);//превращаем переменную в текст
+            variableLine = var.type + ";" + var.name + ';' + unsplit(currVar);//превращаем переменную в текст
             if (currVar.size == 0) variableLine = "";
-            //currVar.clear();
             tmpFile << variableLine << endl;
         }
         else {
@@ -159,7 +117,7 @@ void arrDel(const request& request){
 void arrGet(const request& request){
 //структура команды: get имяМассива индекс
     fstream file(request.file, ios::in);
-    if (request.query.size != 3) throw runtime_error("wrong command syntax");
+    if (request.query.size != 3 || !isItNumber(request.query[2])) throw runtime_error("wrong command syntax");
     string name = request.query[1]; //из какого массива считать
     size_t index = stoi(request.query[2]); //с какой позиции
     string variableLine; //считываемая строка с файла
@@ -167,13 +125,13 @@ void arrGet(const request& request){
     bool varIsExist = false;
     while (getline(file, variableLine)){ //проверяем все существующие переменные
         if (variableLine == " " || variableLine.empty()) continue;
-        var.name = splitToArr(variableLine, ';')[0]; //определяем их имена
-        var.data = splitToArr(variableLine, ';')[1]; //и то, что они хранят
-        if (var.name == name){ //если такая переменная существует
+        var.getVarInfo(variableLine);
+        if (var.name == name && var.type == "#ARRAY"){ //если такая переменная существует
             varIsExist = true; //закрываем защёлку
             arr<string> currVar = splitToArr(var.data); //определяем реальную переменную этого Типа данных
             if (index < currVar.size) cout << currVar[index] << endl;
             else cout << "Index out of range" << endl;
+            break;
         }
     }
     if (!varIsExist){

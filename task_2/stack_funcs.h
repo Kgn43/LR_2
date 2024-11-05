@@ -2,9 +2,10 @@
 #define STACK_FUNCS_H
 
 #include "generalFuncs.h"
-#include "Stack.h"
+#include "structures/Stack.h"
 
-void printStack(const request& request);
+using std::ifstream, std::ios, std::fstream, std::runtime_error;
+
 void stackPush(const request& request);
 void stackPop(const request& request);
 void stackGet(const request& request);

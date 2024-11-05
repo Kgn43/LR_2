@@ -1,44 +1,6 @@
 #include "list_funcs.h"
 
 
-void printList(const request& request){
-    ifstream file(request.file, ios::in); //откуда читаем
-    string variableLine; //считываемая строка с файла
-    if (request.query.size == 1){ //вывести все переменные
-        fileData var;
-        while (getline(file, variableLine)) { //проверяем все существующие переменные
-            if (variableLine == " " || variableLine.empty()) continue;
-            var.name = splitToArr(variableLine, ';')[0]; //определяем их имена
-            var.data = splitToArr(variableLine, ';')[1]; //и то, что они хранят
-            List<string> currVar = splitToList(var.data); //определяем реальную переменную этого Типа данных
-            cout << var.name << " = " << currVar << endl;
-        }
-    }
-    else if (request.query.size == 2) { //вывести одну переменную
-        string name = request.query[1]; //имя искомой переменной
-        fileData var;
-        bool varIsExist = false;
-        while (getline(file, variableLine)){ //проверяем все существующие переменные
-            if (variableLine == " " || variableLine.empty()) continue;
-            var.name = splitToArr(variableLine, ';')[0]; //определяем их имена
-            var.data = splitToArr(variableLine, ';')[1]; //и то, что они хранят
-            if (var.name == name){ //если такая переменная существует
-                varIsExist = true; //закрываем защёлку
-                List<string> currVar = splitToList(var.data); //определяем реальную переменную этого Типа данных
-                cout << var.name << " = " << currVar << endl;
-            }
-        }
-        if (!varIsExist){
-            cout << "Wrong variable name" << endl;
-        }
-    }
-    else {
-        cout << "Wrong syntax" << endl;
-    }
-    file.close();
-}
-
-
 void listPush(const request& request){
 //структура команды: push имяСписка кудаЗаписать чтоЗаписать
     fstream file(request.file, ios::in);
@@ -54,9 +16,8 @@ void listPush(const request& request){
     bool varIsExist = false;
     while (getline(file, variableLine)){ //проверяем все существующие переменные
         if (variableLine == " " || variableLine.empty()) continue;
-        var.name = splitToArr(variableLine, ';')[0]; //определяем их имена
-        var.data = splitToArr(variableLine, ';')[1]; //и то, что они хранят
-        if (var.name == name){ //если такая переменная существует
+        var.getVarInfo(variableLine);
+        if (var.name == name && !varIsExist && var.type == "#LIST"){ //если такая переменная существует
             varIsExist = true; //закрываем защёлку
             List<string> currVar = splitToList(var.data); //определяем реальную переменную этого Типа данных
             if (place == "begin"){
@@ -65,8 +26,7 @@ void listPush(const request& request){
             else {
                 currVar.backInsert(value);
             }
-            variableLine = var.name + ';' + unSplitList(currVar);//превращаем переменную в текст
-            //currVar.clear();
+            variableLine = var.type + ";" + var.name + ';' + unSplitList(currVar);//превращаем переменную в текст
             tmpFile << variableLine << endl;
         }
         else {
@@ -77,7 +37,7 @@ void listPush(const request& request){
         cout << "making new list" << endl;
         List<string> newVar;//да, делаем это всегда.
         newVar.headInsert(value);
-        variableLine = name + ';' + unSplitList(newVar);//превращаем переменную в текст
+        variableLine = "#LIST;" + name + ';' + unSplitList(newVar);//превращаем переменную в текст
         tmpFile << variableLine;
     }
     file.close();
@@ -105,9 +65,8 @@ void listDel(const request& request){
     bool varIsExist = false;
     while (getline(file, variableLine)){ //проверяем все существующие переменные
         if (variableLine == " " || variableLine.empty()) continue;
-        var.name = splitToArr(variableLine, ';')[0]; //определяем их имена
-        var.data = splitToArr(variableLine, ';')[1]; //и то, что они хранят
-        if (var.name == name){ //если такая переменная существует
+        var.getVarInfo(variableLine);
+        if (var.name == name && !varIsExist && var.type == "#LIST"){ //если такая переменная существует
             varIsExist = true; //закрываем защёлку
             List<string> currVar = splitToList(var.data); //определяем реальную переменную этого Типа данных
             if (wh == "begin") {
@@ -119,8 +78,7 @@ void listDel(const request& request){
             else {
                 currVar.delByVal(wh);
             }
-            variableLine = var.name + ';' + unSplitList(currVar);//превращаем переменную в текст
-            //currVar.clear();
+            variableLine =var.type + ";" + var.name + ';' + unSplitList(currVar);//превращаем переменную в текст
             if (currVar.first != nullptr){
                 tmpFile << variableLine << endl;
             }
@@ -156,9 +114,8 @@ void listGet(const request& request){
     bool varIsExist = false;
     while (getline(file, variableLine)){ //проверяем все существующие переменные
         if (variableLine == " " || variableLine.empty()) continue;
-        var.name = splitToArr(variableLine, ';')[0]; //определяем их имена
-        var.data = splitToArr(variableLine, ';')[1]; //и то, что они хранят
-        if (var.name == name){ //если такая переменная существует
+        var.getVarInfo(variableLine);
+        if (var.name == name && var.type == "#LIST"){ //если такая переменная существует
             varIsExist = true; //закрываем защёлку
             List<string> currVar = splitToList(var.data); //определяем реальную переменную этого Типа данных
             if (currVar.find(value)){
@@ -167,7 +124,7 @@ void listGet(const request& request){
             else {
                 cout << "value " << value << " isn't in the list " << name << endl;
             }
-            //currVar.clear();
+            break;
         }
     }
     if (!varIsExist){

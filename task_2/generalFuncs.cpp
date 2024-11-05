@@ -73,6 +73,7 @@ void callHelp(){ //я слишком поздно понял, что можно 
     std::cout << std::endl;
     std::cout << "\t\tOR" << std::endl;
     std::cout << "\t\'push hashMapName key\'  - get one pair value by key" << std::endl;
+    std::cout << std::endl;
 
 
     std::cout << "Set syntax:" << std::endl;
@@ -85,6 +86,7 @@ void callHelp(){ //я слишком поздно понял, что можно 
 
     std::cout << "at:" << std::endl;
     std::cout << "\t\'SETat setName value\'  - check is this value in set" << std::endl;
+    std::cout << std::endl;
 }
 
 
@@ -135,6 +137,17 @@ structures structRequest(const string& input){
 }
 
 
+structures getType(const string& typeInFile){
+    if (typeInFile == "#ARRAY") return structures::ARRAY;
+    if (typeInFile == "#LIST") return structures::LIST;
+    if (typeInFile == "#QUEUE") return structures::QUEUE;
+    if (typeInFile == "#STACK") return structures::STACK;
+    if (typeInFile == "#HASHMAP") return structures::HASHMAP;
+    if (typeInFile == "#SET") return structures::SET;
+    throw runtime_error("This structure isn't exist");
+}
+
+
 request getRequest(int argc, char *argv[] ){
     request output;
     for (int i = 0; i < argc; ++i){
@@ -161,18 +174,7 @@ request getRequest(int argc, char *argv[] ){
 }
 
 
-structures getType(const string& fName){
-    string splited = splitToArr(fName, '.')[0];
-    if (splited == "arr") return structures::ARRAY;
-    if (splited == "list") return structures::LIST;
-    if (splited == "queue") return structures::QUEUE;
-    if (splited == "stack") return structures::STACK;
-    if (splited == "hashMap") return structures::HASHMAP;
-    if (splited == "set") return structures::SET;
-    else{
-        throw runtime_error("This structure isn't exist");
-    }
-}
+
 
 
 bool isItNumber(const std::string& str) {

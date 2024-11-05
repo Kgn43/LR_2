@@ -1,44 +1,6 @@
 #include "set_funcs.h"
 
 
-void printSet(const request& request) {
-    ifstream file(request.file, ios::in); //откуда читаем
-    string variableLine; //считываемая строка с файла
-    if (request.query.size == 1){ //вывести все переменные
-        fileData var;
-        while (getline(file, variableLine)) { //проверяем все существующие переменные
-            if (variableLine == " " || variableLine.empty()) continue;
-            var.name = splitToArr(variableLine, ';')[0]; //определяем их имена
-            var.data = splitToArr(variableLine, ';')[1]; //и то, что они хранят
-            //определяем реальную переменную этого Типа данных
-            Set currVar = setFromStr(var.data);
-            cout << var.name << " = " << currVar << endl;
-        }
-    }
-    else if (request.query.size == 2) { //вывести одну переменную
-        string name = request.query[1]; //имя искомой переменной
-        fileData var;
-        bool varIsExist = false;
-        while (getline(file, variableLine)){ //проверяем все существующие переменные
-            if (variableLine == " " || variableLine.empty()) continue;
-            var.name = splitToArr(variableLine, ';')[0]; //определяем их имена
-            var.data = splitToArr(variableLine, ';')[1]; //и то, что они хранят
-            if (var.name == name){ //если такая переменная существует
-                varIsExist = true; //закрываем защёлку
-                Set currVar = setFromStr(var.data); //определяем реальную переменную этого Типа данных
-                cout << var.name << " = " << currVar << endl;
-            }
-        }
-        if (!varIsExist){
-            cout << "Wrong variable name" << endl;
-        }
-    }
-    else {
-        cout << "Wrong syntax" << endl;
-    }
-    file.close();
-}
-
 void setAdd(const request& request) {
     //структура команды: insert setName value
     fstream file(request.file, ios::in);
@@ -55,13 +17,12 @@ void setAdd(const request& request) {
     bool varIsExist = false;
     while (getline(file, variableLine)){ //проверяем все существующие переменные
         if (variableLine == " " || variableLine.empty()) continue;
-        var.name = splitToArr(variableLine, ';')[0]; //определяем их имена
-        var.data = splitToArr(variableLine, ';')[1]; //и то, что они хранят
-        if (var.name == name){ //если такая переменная существует
+        var.getVarInfo(variableLine);
+        if (var.name == name && !varIsExist && var.type == "#SET"){ //если такая переменная существует
             varIsExist = true; //закрываем защёлку
             Set currVar = setFromStr(var.data); //определяем реальную переменную этого Типа данных
             currVar.insert(stoi(value)); //закидываем то, что просят
-            variableLine = var.name + ';' + strFromSet(currVar);//превращаем переменную в текст
+            variableLine = var.type + ';' + var.name + ';' + strFromSet(currVar);//превращаем переменную в текст
             tmpFile << variableLine << endl;
         }
         else {
@@ -72,7 +33,7 @@ void setAdd(const request& request) {
         cout << "making new set" << endl;
         Set newVar;//да, делаем это всегда.
         newVar.insert(stoi(value));
-        variableLine = name + ';' + strFromSet(newVar);//превращаем переменную в текст
+        variableLine = "#SET;" + name + ';' + strFromSet(newVar);//превращаем переменную в текст
         tmpFile << variableLine;
     }
     file.close();
@@ -102,13 +63,12 @@ void setDel(const request& request) {
     bool varIsExist = false;
     while (getline(file, variableLine)){ //проверяем все существующие переменные
         if (variableLine == " " || variableLine.empty()) continue;
-        var.name = splitToArr(variableLine, ';')[0]; //определяем их имена
-        var.data = splitToArr(variableLine, ';')[1]; //и то, что они хранят
-        if (var.name == name){ //если такая переменная существует
+        var.getVarInfo(variableLine);
+        if (var.name == name && !varIsExist && var.type == "#SET"){ //если такая переменная существует
             varIsExist = true; //закрываем защёлку
             Set currVar = setFromStr(var.data); //определяем реальную переменную этого Типа данных
             currVar.del(value);
-            variableLine = var.name + ';' + strFromSet(currVar);//превращаем переменную в текст
+            variableLine = var.type + ';' + var.name + ';' + strFromSet(currVar);//превращаем переменную в текст
             if (currVar.pairCount != 0){
                 tmpFile << variableLine << endl;
             }
@@ -145,9 +105,8 @@ void setAt(const request& request) {
     bool varIsExist = false;
     while (getline(file, variableLine)){ //проверяем все существующие переменные
         if (variableLine == " " || variableLine.empty()) continue;
-        var.name = splitToArr(variableLine, ';')[0]; //определяем их имена
-        var.data = splitToArr(variableLine, ';')[1]; //и то, что они хранят
-        if (var.name == name){ //если такая переменная существует
+        var.getVarInfo(variableLine);
+        if (var.name == name && var.type == "#SET"){ //если такая переменная существует
             varIsExist = true; //закрываем защёлку
             Set currVar = setFromStr(var.data); //определяем реальную переменную этого Типа данных
             if (currVar.at(value)){
@@ -156,6 +115,7 @@ void setAt(const request& request) {
             else {
                 cout << "value " << value << " isn't in the set " << name << endl;
             }
+            break;
         }
     }
     if (!varIsExist){

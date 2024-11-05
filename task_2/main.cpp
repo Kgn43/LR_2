@@ -20,7 +20,7 @@ int main(int argc, char *argv[]) {
             if (!isFileExist(request.file) || request.file.empty()){ //проверяем доступ указанного файла/указан ли файл
                 throw runtime_error(("Error: wrong file name or file doesn't exist"));
             }
-            consolePrint(request);
+            ultimatePrint(request);
         } else {
             structures strucType = structRequest(request.query[0]); //определяем по букве структуру
             if (!isFileExist(request.file) || request.file.empty()){ //проверяем доступ указанного файла/указан ли файл
@@ -130,27 +130,58 @@ int main(int argc, char *argv[]) {
 }
 
 
-
-void consolePrint(const request& request){
-    fstream file(request.file, ios::in);
-    structures type = getType(request.file);
-    switch (type) {
+void printOneVar(const fileData &var) {
+    switch (getType(var.type)) {
         case ARRAY:
-            printArr(request);
-            break;
+            cout << var.name << " = " << splitToArr(var.data) << endl;
+        break;
         case LIST:
-            printList(request);
-            break;
+            cout << var.name << " = " << splitToList(var.data) << endl;
+        break;
         case QUEUE:
-            printQueue(request);
-            break;
+            cout << var.name << " = " << splitToQueue(var.data) << endl;
+        break;
         case STACK:
-            printStack(request);
-            break;
+            cout << var.name << " = " << splitToStack(var.data) << endl;
+        break;
         case HASHMAP:
-            printHashMap(request);
-            break;
+            cout << var.name << " = " << hMFromStr(var.data) << endl;
+        break;
         case SET:
-            printSet(request);
+            cout << var.name << " = " << setFromStr(var.data) << endl;
     }
+}
+
+
+void ultimatePrint(const request& request) {
+    ifstream file(request.file, ios::in); //откуда читаем
+    string variableLine; //считываемая строка с файла
+    if (request.query.size == 1){ //вывести все переменные
+        fileData var;
+        while (getline(file, variableLine)) { //проверяем все существующие переменные
+            if (variableLine == " " || variableLine.empty()) continue;
+            var.getVarInfo(variableLine);
+            printOneVar(var);
+        }
+    }
+    else if (request.query.size == 2) { //вывести одну переменную
+        string name = request.query[1]; //имя искомой переменной
+        fileData var;
+        bool varIsExist = false;
+        while (getline(file, variableLine)){ //проверяем все существующие переменные
+            if (variableLine == " " || variableLine.empty()) continue;
+            var.getVarInfo(variableLine);
+            if (var.name == name){ //если такая переменная существует
+                varIsExist = true; //закрываем защёлку
+                printOneVar(var);
+            }
+        }
+        if (!varIsExist){
+            cout << "Wrong variable name" << endl;
+        }
+    }
+    else {
+        cout << "Wrong syntax" << endl;
+    }
+    file.close();
 }

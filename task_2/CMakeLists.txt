@@ -6,19 +6,20 @@ set(CMAKE_CXX_STANDARD 17)
 include_directories(.)
 
 add_executable(LR_1
-    arr.cpp
-    arr_funcs.cpp
-    generalFuncs.cpp
-    hashMap.cpp
-    hashMap_funcs.cpp
-    list.cpp
-    list_funcs.cpp
-    main.cpp
-    Pair.cpp
-    queue.cpp
-    queue_funcs.cpp
-    singleConnList.cpp
-    Stack.cpp
-    stack_funcs.cpp
+        structures/arr.cpp
+        structures/hashMap.cpp
+        structures/list.cpp
+        structures/Pair.cpp
+        structures/queue.cpp
+        structures/singleConnList.cpp
+        structures/Stack.cpp
+        structures/Set.cpp
+        arr_funcs.cpp
+        generalFuncs.cpp
+        hashMap_funcs.cpp
+        list_funcs.cpp
+        main.cpp
+        queue_funcs.cpp
+        stack_funcs.cpp
         set_funcs.cpp
-        Set.cpp)
+)

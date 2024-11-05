@@ -7,20 +7,17 @@
 #include "stack_funcs.h"
 #include "queue_funcs.h"
 #include "hashMap_funcs.h"
-#include "singleConnList.h"
 #include "set_funcs.h"
 
 #include <fstream>
 #include <iostream>
 
 
-structures getType(const string& fName);
-
-
 string delFirstLetter(const string &input);
 
-
-void consolePrint(const request& request);
+void printOneVar(const fileData &var);
+void ultimatePrint(const request& request);
+structures getType(const string& fName);
 
 structures structRequest(const string& input);
 commands commandRequest(const string& input);
