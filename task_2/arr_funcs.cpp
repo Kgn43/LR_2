@@ -62,11 +62,7 @@ void arrPush(const request& request){
         index = stoi(request.query[2]);
         value = request.query[3];
     }
-    else {
-        stringstream serr;
-        serr << "Wrong command syntax";
-        throw runtime_error(serr.str());
-    }
+    else throw runtime_error("Wrong command syntax");
     bool varIsExist = false;
     while (getline(file, variableLine)){ //проверяем все существующие переменные
         if (variableLine == " " || variableLine.empty()) continue;

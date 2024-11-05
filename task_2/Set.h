@@ -7,11 +7,11 @@
 
 #define BUCKETS 10
 
-using std::cout, std::endl, std::ostream;
+using std::cout, std::endl, std::ostream, std::to_string;
 
 
 struct Set {
-    arr<list<int>> buckets;
+    arr<List<int>> buckets;
     size_t bucketCount;
     size_t pairCount;
 

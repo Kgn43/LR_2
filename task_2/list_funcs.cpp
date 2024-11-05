@@ -10,7 +10,7 @@ void printList(const request& request){
             if (variableLine == " " || variableLine.empty()) continue;
             var.name = splitToArr(variableLine, ';')[0]; //определяем их имена
             var.data = splitToArr(variableLine, ';')[1]; //и то, что они хранят
-            list<string> currVar = splitToList(var.data); //определяем реальную переменную этого Типа данных
+            List<string> currVar = splitToList(var.data); //определяем реальную переменную этого Типа данных
             cout << var.name << " = " << currVar << endl;
         }
     }
@@ -24,7 +24,7 @@ void printList(const request& request){
             var.data = splitToArr(variableLine, ';')[1]; //и то, что они хранят
             if (var.name == name){ //если такая переменная существует
                 varIsExist = true; //закрываем защёлку
-                list<string> currVar = splitToList(var.data); //определяем реальную переменную этого Типа данных
+                List<string> currVar = splitToList(var.data); //определяем реальную переменную этого Типа данных
                 cout << var.name << " = " << currVar << endl;
             }
         }
@@ -44,18 +44,10 @@ void listPush(const request& request){
     fstream file(request.file, ios::in);
     fstream tmpFile("tmp.data", ios::out);
     if(!tmpFile.is_open()) throw runtime_error("Tmp file doesn't exist");
-    if (request.query.size != 4) {
-        stringstream serr;
-        serr << "Wrong command syntax";
-        throw runtime_error(serr.str());
-    }
+    if (request.query.size != 4) throw runtime_error("Wrong command syntax");
     string name = request.query[1]; //имя списка
     string place = request.query[2]; // начало/конец
-    if (place != "begin" && place != "end"){
-        stringstream serr;
-        serr << "Wrong insert place";
-        throw runtime_error(serr.str());
-    }
+    if (place != "begin" && place != "end") throw runtime_error("Wrong insert place");
     string value = request.query[3]; //что записать
     string variableLine; //считываемая строка с файла
     fileData var;
@@ -66,7 +58,7 @@ void listPush(const request& request){
         var.data = splitToArr(variableLine, ';')[1]; //и то, что они хранят
         if (var.name == name){ //если такая переменная существует
             varIsExist = true; //закрываем защёлку
-            list<string> currVar = splitToList(var.data); //определяем реальную переменную этого Типа данных
+            List<string> currVar = splitToList(var.data); //определяем реальную переменную этого Типа данных
             if (place == "begin"){
                 currVar.headInsert(value); //закидываем то, что просят в начало
             }
@@ -83,7 +75,7 @@ void listPush(const request& request){
     }
     if (!varIsExist){
         cout << "making new list" << endl;
-        list<string> newVar;//да, делаем это всегда.
+        List<string> newVar;//да, делаем это всегда.
         newVar.headInsert(value);
         variableLine = name + ';' + unSplitList(newVar);//превращаем переменную в текст
         tmpFile << variableLine;
@@ -105,11 +97,7 @@ void listDel(const request& request){
     fstream file(request.file, ios::in);
     fstream tmpFile("tmp.data", ios::out);
     if(!tmpFile.is_open()) throw runtime_error("Tmp file doesn't exist");
-    if (request.query.size != 3) {
-        stringstream serr;
-        serr << "Wrong command syntax";
-        throw runtime_error(serr.str());
-    }
+    if (request.query.size != 3) throw runtime_error("Wrong command syntax");
     string name = request.query[1];
     string wh = request.query[2]; //what/where
     string variableLine; //считываемая строка с файла
@@ -121,7 +109,7 @@ void listDel(const request& request){
         var.data = splitToArr(variableLine, ';')[1]; //и то, что они хранят
         if (var.name == name){ //если такая переменная существует
             varIsExist = true; //закрываем защёлку
-            list<string> currVar = splitToList(var.data); //определяем реальную переменную этого Типа данных
+            List<string> currVar = splitToList(var.data); //определяем реальную переменную этого Типа данных
             if (wh == "begin") {
                 currVar.delFirst();
             }
@@ -160,16 +148,7 @@ void listDel(const request& request){
 void listGet(const request& request){
 //структура команды: get имяСписка искомоеЗначение
     fstream file(request.file, ios::in);
-    if(!file.is_open()){
-        stringstream serr;
-        serr << "This file doesn't exist";
-        throw runtime_error(serr.str());
-    }
-    if (request.query.size != 3) {
-        stringstream serr;
-        serr << "Wrong command syntax";
-        throw runtime_error(serr.str());
-    }
+    if (request.query.size != 3) throw runtime_error("Wrong command syntax");
     string name = request.query[1]; //в каком списке искать
     string value = request.query[2]; //что ищем
     string variableLine; //считываемая строка с файла
@@ -181,7 +160,7 @@ void listGet(const request& request){
         var.data = splitToArr(variableLine, ';')[1]; //и то, что они хранят
         if (var.name == name){ //если такая переменная существует
             varIsExist = true; //закрываем защёлку
-            list<string> currVar = splitToList(var.data); //определяем реальную переменную этого Типа данных
+            List<string> currVar = splitToList(var.data); //определяем реальную переменную этого Типа данных
             if (currVar.find(value)){
                 cout << "value " << value << " is in the list " << name << endl;
             }

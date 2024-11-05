@@ -1,11 +1,11 @@
 #include "Pair.h"
 
 
-Pair splitToPair(const string &inputLine, char delimiter) {
+Pair splitToPair(const string &inputLine, const char &delimiter) {
     string word;
     Pair output;
     bool z = true;
-    for (auto ch: inputLine) {
+    for (const auto &ch: inputLine) {
         if (ch == delimiter && z) {
             output.key = word;
             word = "";
@@ -19,6 +19,6 @@ Pair splitToPair(const string &inputLine, char delimiter) {
 }
 
 
-string unsplitFromPair(const Pair &input, char delimiter) {
+string unsplitFromPair(const Pair &input, const char &delimiter) {
     return input.key + delimiter + input.value;
 }

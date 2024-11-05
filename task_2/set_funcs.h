@@ -4,6 +4,7 @@
 #include "generalFuncs.h"
 #include "Set.h"
 
+using std::ios, std::ifstream, std::fstream, std::runtime_error;
 
 void printSet(const request& request);
 void setAdd(const request& request);

@@ -1,32 +1,32 @@
-#ifndef LIST_H_INCLUDED
-#define LIST_H_INCLUDED
+#ifndef LIST_H
+#define LIST_H
 
 #include "Pair.h"
 #include <string>
-#include <iostream>
-using namespace std;
+#include <sstream>
+using std::string, std::ostream;
 
 template <typename T>
-struct listNode {
+struct ListNode {
     T value;
-    listNode* next;
-    listNode* previous;
+    ListNode* next;
+    ListNode* previous;
 
     //конструкторы
-    listNode(T val, listNode* following, listNode* prev) : value(val), next(following), previous(prev) {}
-    listNode(T val) : value(val), next(nullptr), previous(nullptr) {}
-    listNode() : value(T()), next(nullptr), previous(nullptr) {} //не уверен, но тут могут возникать ошибки, если нет конструктора по умолчанию для АТД
+    ListNode(T val, ListNode* following, ListNode* prev) : value(val), next(following), previous(prev) {}
+    ListNode(T val) : value(val), next(nullptr), previous(nullptr) {}
+    ListNode() : value(T()), next(nullptr), previous(nullptr) {} //не уверен, но тут могут возникать ошибки, если нет конструктора по умолчанию для АТД
 };
 
 
 
 template <typename T>
-struct list{
-    listNode<T>* first;
-    listNode<T>* last;
+struct List{
+    ListNode<T>* first;
+    ListNode<T>* last;
 
     //конструктор
-    list<T>(): first(nullptr), last(nullptr) {}
+    List<T>(): first(nullptr), last(nullptr) {}
 
     void headInsert(T value);
     void backInsert(T value);
@@ -36,8 +36,8 @@ struct list{
     bool find(T value);
 
 
-    friend ostream& operator<<(ostream& os, const list<T>& ls) {
-        listNode<T> *curr = ls.first;
+    friend ostream& operator<<(ostream& os, const List<T>& ls) {
+        ListNode<T> *curr = ls.first;
         os << "{";
         while (curr != nullptr){
             os << "[" << curr->value << "]";
@@ -53,12 +53,13 @@ struct list{
 
 };
 
-template struct list<Pair>;
-template struct list<int>;
-template struct list<string>;
+template struct List<Pair>;
+template struct List<int>;
+template struct List<string>;
 
-list<string> splitToList(const string &input, char delimiter = ' ');
-string unSplitList(const list<string>& input, char delimiter = ' ');
+List<string> splitToList(const string &input, const char &delimiter = ' ');
+string unSplitList(const List<string>& input, const char &delimiter = ' ');
+List<Pair> splitToListPair(const string &input, const string& pairDelimiter, const char &keyValueDelimiter);
 
 
-#endif // LIST_H_INCLUDED
+#endif // LIST_H

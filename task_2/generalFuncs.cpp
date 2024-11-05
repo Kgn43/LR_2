@@ -1,5 +1,7 @@
 #include "generalFuncs.h"
 
+using std::runtime_error;
+
 void callHelp(){ //я слишком поздно понял, что можно было написать батник))) ну, пусть будет так
 
     std::cout << std::endl << std::endl << "add --file FileName --query 'your query'" << std::endl << std::endl << std::endl << std::endl;

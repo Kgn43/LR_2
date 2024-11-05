@@ -1,9 +1,9 @@
 #ifndef ARR_H
 #define ARR_H
 
-#include <iostream>
+#include <string>
 #include <sstream>
-using namespace std;
+using std::ostream, std::string, std::out_of_range;
 
 template <typename T>
 struct arr {

@@ -12,8 +12,8 @@ size_t hashMap::hash(const string& key) const {
 
 void hashMap::coliseum() {
     hashMap newSet(this->bucketCount + 1);
-    list<Pair> oneBucket;
-    listNode<Pair>* node;
+    List<Pair> oneBucket;
+    ListNode<Pair>* node;
     for (size_t i = 0; i < this->buckets.size; ++i){
         oneBucket = this->buckets[i];
         node = oneBucket.first;
@@ -68,8 +68,8 @@ void hashMap::insert(const Pair& input) {
 
 void hashMap::del(const string& key) {
     size_t thisHash = hash(key);
-    list<Pair> oneBucket = this->buckets[thisHash];
-    listNode<Pair>* node = oneBucket.first;
+    List<Pair> oneBucket = this->buckets[thisHash];
+    ListNode<Pair>* node = oneBucket.first;
     while(node != nullptr){
         if (node->next == nullptr){ //остался один узел
             delete node;
@@ -105,7 +105,7 @@ void hashMap::del(const string& key) {
 
 Pair hashMap::Get(const string &key) const {
     size_t thisHash = hash(key);
-    listNode<Pair>* node = this->buckets[thisHash].first;
+    ListNode<Pair>* node = this->buckets[thisHash].first;
     while(node != nullptr){
         if (node->value.key == key){
             return node->value;

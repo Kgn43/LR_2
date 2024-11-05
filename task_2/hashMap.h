@@ -9,7 +9,7 @@ using namespace std;
 
 
 struct hashMap {
-    arr<list<Pair>> buckets;
+    arr<List<Pair>> buckets;
     size_t bucketCount;
     size_t pairCount;
 

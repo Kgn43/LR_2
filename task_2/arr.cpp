@@ -41,13 +41,6 @@ void arr<T>::erase() {
     --size;
 }
 
-template <typename T>
-void arr<T>::print() {
-    for (int i = 0; i < size; ++i){
-        cout << data[i] << " ";
-    }
-    cout << endl;
-}
 
 template <typename T>
 void arr<T>::del(size_t index) {

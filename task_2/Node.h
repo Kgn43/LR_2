@@ -2,11 +2,10 @@
 #define LAB_1_NODE_H
 #include <string>
 
-using namespace std;
+using std::string;
 
 template <typename T>
 struct Node {
-public:
     T value;
     Node* next;
 

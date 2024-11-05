@@ -4,6 +4,8 @@
 #include "generalFuncs.h"
 #include "list.h"
 
+using std::cout, std::endl, std::ios, std::runtime_error, std::ifstream, std::fstream;
+
 
 void printList(const request& request);
 void listPush(const request& request);

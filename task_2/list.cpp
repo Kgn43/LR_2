@@ -2,8 +2,8 @@
 
 
 template<typename T>
-void list<T>::backInsert(T value) {
-    listNode<T>* newLast = new listNode(value);
+void List<T>::backInsert(T value) {
+    ListNode<T>* newLast = new ListNode(value);
     if (last == nullptr){
         last = newLast;
         first = newLast;
@@ -16,8 +16,8 @@ void list<T>::backInsert(T value) {
 }
 
 template<typename T>
-void list<T>::headInsert(T value) {
-    listNode<T>* newFirst = new listNode(value);
+void List<T>::headInsert(T value) {
+    ListNode<T>* newFirst = new ListNode(value);
     if (last == nullptr){
         last = newFirst;
         first = newFirst;
@@ -31,7 +31,7 @@ void list<T>::headInsert(T value) {
 
 
 template<typename T>
-void list<T>::delLast() {
+void List<T>::delLast() {
     if (this->first->next == nullptr){
         delete this->last;
         this->first = nullptr;
@@ -46,7 +46,7 @@ void list<T>::delLast() {
 
 
 template<typename T>
-void list<T>::delFirst() {
+void List<T>::delFirst() {
     if (this->last->previous == nullptr){
         delete this->first;
         this->first = nullptr;
@@ -61,8 +61,8 @@ void list<T>::delFirst() {
 
 
 template<typename T>
-bool list<T>::find(T value) {
-    listNode<T> *tmp = first;
+bool List<T>::find(T value) {
+    ListNode<T> *tmp = first;
     while (tmp != nullptr){
         if (tmp->value == value){
             return true;
@@ -75,8 +75,8 @@ bool list<T>::find(T value) {
 
 
 template<typename T>
-void list<T>::delByVal(T val) {
-    listNode<T> *tmp = first;
+void List<T>::delByVal(T val) {
+    ListNode<T> *tmp = first;
     if (this->first->value == val) {
         delFirst();
         return;
@@ -94,9 +94,9 @@ void list<T>::delByVal(T val) {
 }
 
 
-list<string> splitToList(const string &input, char delimiter){
+List<string> splitToList(const string &input, const char &delimiter){
     string word;
-    list<string> output;
+    List<string> output;
     for (auto ch : input){
         if (ch == delimiter) {
             output.backInsert(word);
@@ -113,9 +113,9 @@ list<string> splitToList(const string &input, char delimiter){
 }
 
 
-list<Pair> splitToListPair(const string &input, const string& pairDelimiter, char keyValueDelimiter){
+List<Pair> splitToListPair(const string &input, const string& pairDelimiter, const char &keyValueDelimiter){
     string word;
-    list<Pair> output;
+    List<Pair> output;
     Pair currentPair;
     bool isDelim;
     int j;
@@ -146,8 +146,8 @@ list<Pair> splitToListPair(const string &input, const string& pairDelimiter, cha
 }
 
 
-string unSplitList(const list<string>& input, char delimiter){
-    listNode<string>* curr = input.first;
+string unSplitList(const List<string>& input, const char &delimiter){
+    ListNode<string>* curr = input.first;
     string output;
     while (curr != nullptr){
         output += curr->value + delimiter;

@@ -14,8 +14,8 @@ size_t Set::hash(const int& value) const {
 
 void Set::coliseum() {
     Set newSet(this->bucketCount * 2);
-    list<int> oneBucket;
-    listNode<int>* node;
+    List<int> oneBucket;
+    ListNode<int>* node;
     for (size_t i = 0; i < this->buckets.size; ++i){
         oneBucket = this->buckets[i];
         node = oneBucket.first;
@@ -57,7 +57,7 @@ void Set::del(const int& value) {
 
 bool Set::at(const int &value) const {
     const size_t thisHash = hash(value);
-    listNode<int>* node = this->buckets[thisHash].first;
+    ListNode<int>* node = this->buckets[thisHash].first;
     while(node != nullptr){
         if (node->value == value){
             return true;

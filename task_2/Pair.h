@@ -4,14 +4,14 @@
 #include <string>
 #include <sstream>
 
-using namespace std;
+using std::string, std::ostream;
 
 struct Pair{
     string key;
     string value;
 
     Pair(): key(""), value("") {};
-    Pair(string k, string v): key(k), value(v) {};
+    Pair(string k, string v): key(std::move(k)), value(std::move(v)) {};
 
 
     bool operator==(const Pair& other) const {
@@ -28,7 +28,7 @@ struct Pair{
 };
 
 
-Pair splitToPair(const string& inputLine, char delimiter);
-string unsplitFromPair(const Pair& input, char delimiter);
+Pair splitToPair(const string& inputLine,const char &delimiter);
+string unsplitFromPair(const Pair& input, const char &delimiter);
 
 #endif //LAB_1_PAIR_H
