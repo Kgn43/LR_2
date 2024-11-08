@@ -128,6 +128,19 @@ Pair hashMap::Get() const {
 }
 
 
+bool hashMap::at(const string &key) const {
+    const size_t thisHash = hash(key);
+    ListNode<Pair>* node = this->buckets[thisHash].first;
+    while(node != nullptr){
+        if (node->value.key == key){
+            return true;
+        }
+        node = node->next;
+    }
+    return false;
+}
+
+
 
 hashMap hMFromStr(const string& line){
     arr<string> pairs = splitToArr(line, "_NEXT_");

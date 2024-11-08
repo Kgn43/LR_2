@@ -23,6 +23,7 @@ struct hashMap {
     void coliseum();
     Pair Get(const string& key) const;
     Pair Get() const;
+    bool at(const string &key) const;
 
 
     friend ostream& operator<<(ostream& os, const hashMap& hS) {
