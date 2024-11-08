@@ -12,7 +12,9 @@ add_executable(LR_2
         structures/arr.cpp
         structures/Pair.cpp
         structures/hashMap.cpp
+        structures/treeBalanced.cpp
         SetTask.cpp
         ArrayTask.cpp
         HashTask.cpp
+        TreeTask.cpp
 )

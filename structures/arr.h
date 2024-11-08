@@ -31,9 +31,9 @@ struct arr {
         }
     }
 
-    ~arr() {
-        delete[] data;
-    }
+    // ~arr() {
+    //     delete[] data;
+    // }
 
     void realoc();
     void push_back(const T& value);
