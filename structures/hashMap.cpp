@@ -162,3 +162,14 @@ string strFromHM(hashMap input){
     }
     return output;
 }
+
+
+void hashMap::copy(const hashMap &hm) {
+    for (int i = 0; i < hm.bucketCount; ++i) {
+        auto node = hm.buckets[i].first;
+        while (node != nullptr) {
+            this->insert(node->value);
+            node = node->next;
+        }
+    }
+}

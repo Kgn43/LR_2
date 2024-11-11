@@ -24,6 +24,7 @@ struct hashMap {
     Pair Get(const string& key) const;
     Pair Get() const;
     bool at(const string &key) const;
+    void copy(const hashMap& hm);
 
 
     friend ostream& operator<<(ostream& os, const hashMap& hS) {

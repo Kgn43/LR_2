@@ -29,9 +29,8 @@ void arrayTask() {
     arr<char> arr3{"hello"};
     arr<char> mask1{"*@stud.ns?u.ru"};
     arr<char> mask2{"*@stud.n?u.ru"};
-    //cout << mask2 << endl;
     cout << maskCheck(mask1, arr1) << endl;
     cout << maskCheck(mask1, arr2) << endl;
     cout << maskCheck(mask2, arr1) << endl;
-    cout << maskCheck(mask1, arr2) << endl;
+    cout << maskCheck(mask1, arr3) << endl;
 }

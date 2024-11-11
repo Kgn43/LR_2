@@ -15,7 +15,7 @@ char oneExpr(const char &op1, const char &opert ,const char &op2) {
 
 
 string solveNot(const string &expr) {
-    //solve '1'
+    //solve '!'
     string exprBuff;
     for (int i = 0; i < expr.size(); ++i) {
         if (expr[i] == '!') {
@@ -164,7 +164,9 @@ char getAnswer(string expression) {
 
 void stackTask() {
     string expr = "!1+1*!0";
+    cout << expr << endl;
     cout << getAnswer(expr) << endl;
-    expr = "(((1*0)))*(!0^0)";
+    expr = "!(((1*0)))*(!0^0)";
+    cout << expr << endl;
     cout << getAnswer(expr) << endl;
 }
